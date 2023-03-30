@@ -1,0 +1,80 @@
+#N canvas 389 22 645 603 10;
+#X obj 236 238 atan~;
+#X obj 410 205 Scope~ 130 130 256 3 128 -1 1 0 0 0 0 102 255 51 135
+135 135 0;
+#X obj 246 184 >~ 0;
+#X floatatom 323 105 5 0.01 1 0 - - -;
+#X obj 381 -42 vsl 15 128 0.01 0.9 0 0 empty empty empty 0 -9 0 10
+-262144 -1 -1 1100 1;
+#X obj 236 214 *~;
+#X obj 116 46 readsf~;
+#X msg 86 19 0;
+#X obj 181 40 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 191 127 osc~;
+#X obj 361 157 *~ 0.5;
+#X obj 52 125 helmholtz~;
+#X obj 68 169 *~;
+#X obj 3 229 hsl 128 15 1 10 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 300 1;
+#X obj 2 263 round~;
+#X obj 107 464 dac~;
+#X obj 99 394 *~;
+#X obj 128 395 *~;
+#X obj 156 395 *~;
+#X obj 160 325 vsl 15 50 0 1 0 0 empty empty Bridge 0 -9 0 10 -261234
+-1 -1 2900 1;
+#X obj 128 325 vsl 15 50 0 1 0 0 empty empty Sine 0 -9 0 10 -261234
+-1 -1 3900 1;
+#X obj 99 313 vsl 15 50 0 1 0 0 empty empty Tromba_signal 0 -9 0 10
+-261234 -1 -1 3500 1;
+#X obj 262 304 fiddle~;
+#X floatatom 302 326 5 0 0 0 - - -;
+#X obj 303 350 *~ 0.01;
+#X obj 156 420 *~;
+#X msg 116 19 open TrombaTroelsPickup.wav \, 1;
+#X text 119 -2 Read audiofile and loop;
+#X text 55 16 stop;
+#X obj 52 98 hip~ 30;
+#X obj 52 74 lop~ 1000;
+#X text 10 209 Change harmonics;
+#X text 41 321;
+#X text 272 236 Rounded square;
+#X text 400 -8 Change sharpness of arctan fct;
+#X text 269 284 Amplitude;
+#X text 184 111 Sine from Helmholtz;
+#X connect 0 0 18 0;
+#X connect 0 0 10 0;
+#X connect 2 0 5 1;
+#X connect 3 0 2 1;
+#X connect 4 0 3 0;
+#X connect 5 0 0 0;
+#X connect 6 0 16 1;
+#X connect 6 0 22 0;
+#X connect 6 0 30 0;
+#X connect 6 1 8 0;
+#X connect 7 0 6 0;
+#X connect 8 0 26 0;
+#X connect 9 0 2 0;
+#X connect 9 0 5 0;
+#X connect 9 0 17 1;
+#X connect 10 0 1 0;
+#X connect 11 1 12 0;
+#X connect 12 0 9 0;
+#X connect 13 0 14 0;
+#X connect 14 0 12 1;
+#X connect 16 0 15 0;
+#X connect 16 0 15 1;
+#X connect 17 0 25 0;
+#X connect 18 0 25 0;
+#X connect 19 0 18 1;
+#X connect 20 0 17 0;
+#X connect 21 0 16 0;
+#X connect 22 3 23 0;
+#X connect 23 0 24 0;
+#X connect 24 0 25 1;
+#X connect 25 0 15 0;
+#X connect 25 0 15 1;
+#X connect 26 0 6 0;
+#X connect 29 0 11 0;
+#X connect 30 0 29 0;

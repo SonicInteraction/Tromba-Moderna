@@ -1,0 +1,372 @@
+#N canvas 467 346 1121 724 10;
+#X declare -lib zexy;
+#X obj 547 42 cnv 15 450 500 empty empty empty 20 12 0 14 -149405 -66577
+0;
+#X obj 134 44 cnv 15 400 350 empty empty empty 20 12 0 14 -149405 -66577
+0;
+#X obj 16 432 cnv 15 150 90 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 7 -81 cnv 15 500 100 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#N canvas 833 91 1242 862 fundamentalFeedback 1;
+#X obj 12 576 cnv 15 210 200 empty empty empty 20 12 1 14 -166958 -66577
+0;
+#X obj 753 311 send freq;
+#X obj 22 4 cnv 15 210 200 empty empty empty 20 12 1 14 -166958 -66577
+0;
+#X obj 574 173 cnv 15 470 450 empty empty empty 20 12 1 14 -149405
+-66577 0;
+#X obj 231 243 cnv 15 320 300 empty empty empty 20 12 1 14 -149405
+-66577 0;
+#X obj 46 57 hip~ 50;
+#X obj 666 521 sig~;
+#X obj 668 401 int;
+#X obj 665 439 pack 0 0;
+#X obj 682 371 t i b i;
+#X msg 241 287 fidelity 0;
+#X obj 632 267 helmholtz~ 2048 4;
+#X msg 744 223 sens 0.4;
+#X obj 241 331 helmholtz~ 1024;
+#X obj 46 32 inlet~;
+#X obj 25 759 outlet~;
+#X obj 25 651 *~ 1;
+#X obj 327 408 clip 0 1;
+#X obj 235 407 send fidelity;
+#X obj 46 113 send~ filtSig;
+#X obj 666 546 send~ BPF;
+#X obj 681 310 speedlim 2;
+#X msg 666 468 \$1 \$2 1;
+#X obj 46 84 lp6_cheb~ 500;
+#X obj 25 586 receive~ filtSig;
+#X obj 314 287 receive~ filtSig;
+#X obj 632 224 receive~ filtSig;
+#X obj 242 253 receive lb;
+#X obj 718 185 receive lb;
+#X obj 327 455 send filtSigAmp;
+#X obj 75 614 receive filtSigAmp;
+#X text 97 5 INPUT;
+#X text 9 555 FILTER/AMPLITUDE MODULATION/OUTPUT;
+#X text 233 222 AMPLITUDE MODULATION PARAMETERS;
+#X text 373 -64 This subpatch takes the original signal from the tromba
+and applies a low pass and high pass filter. SNAC (helmholtz~) is then
+used to modulate the amplitude and centre frequency of the bandpass
+filter. SNAC - Specially Normalized AutoCorrelation function. Really
+simpliy it is pitch tracking in the time domain \, it takes a snapshot
+(window) of the signal (in samples \, first argument for the object).
+It then shifts that sample on the x (time) and multiplies it with the
+original window. The loudest pitch will become more and more pronounced.
+Its a lot more fucking complicated really - http://www.katjaas.nl/helmholtz/helmholtz.html
+Fidelity - a measure of how periodic a waveform is \, from 0 - 1 Kind
+of how confident helmholtz~ is that it has found the pitch;
+#X text 814 262 Pitch calculated by helmholtz~;
+#X text 579 152 BANDPASS FILTER CENTER FREQ MODULATION PARAMETERS;
+#X text 25 142 Audio comes in \, through high pass \; filter (hip~)
+and low pass \; filter (lp6).;
+#X text 337 311 Control the amount of signal going \; through the bandpass
+filter by \; using the fidelity output of \; helmholtz;
+#X text 353 368 Multiply by 2 and clip to create \; more of an exponential
+;
+#X text 69 699 Amplitude modulation of \; instrument signal (*~) \;
+and then bandpass with \; the fundamental as the \; centre frequency
+(vcf~);
+#X text 829 307 Limit the speed of messages \; from helmholtz to 2ms
+\, in \; order for the ramp to \; complete before next message;
+#X text 820 378 Take the new pitch value and \; set it as the destination
+\; for the ramp \, set the \; previous pitch value as the \; start
+of the ramp and \; update the int \; (previous pitch variable);
+#X text 824 480 Convert the numerical line \; to an audio signal to
+\; control the bandpass \; filter frequecy.;
+#X obj 755 373 send freq;
+#X obj 74 675 receive~ BPF;
+#X obj 328 376 * 2;
+#X obj 25 710 vcf~ 1;
+#X obj 580 546 send rampFreq;
+#X obj 757 341 median;
+#X obj 666 498 line 0 2;
+#X obj 25 739 +~;
+#X obj 755 305 zl group 3;
+#X connect 5 0 23 0;
+#X connect 6 0 20 0;
+#X connect 7 0 8 0;
+#X connect 8 0 22 0;
+#X connect 9 0 7 1;
+#X connect 9 1 7 0;
+#X connect 9 2 8 1;
+#X connect 10 0 13 0;
+#X connect 11 1 21 0;
+#X connect 11 1 21 1;
+#X connect 11 1 52 0;
+#X connect 12 0 11 0;
+#X connect 13 2 18 0;
+#X connect 13 2 46 0;
+#X connect 14 0 5 0;
+#X connect 16 0 47 0;
+#X connect 17 0 29 0;
+#X connect 21 0 9 0;
+#X connect 22 0 50 0;
+#X connect 23 0 19 0;
+#X connect 24 0 16 0;
+#X connect 24 0 51 1;
+#X connect 25 0 13 0;
+#X connect 26 0 11 0;
+#X connect 27 0 10 0;
+#X connect 28 0 12 0;
+#X connect 30 0 16 1;
+#X connect 45 0 47 1;
+#X connect 46 0 17 0;
+#X connect 47 0 51 0;
+#X connect 49 0 44 0;
+#X connect 50 0 6 0;
+#X connect 50 0 48 0;
+#X connect 51 0 15 0;
+#X connect 52 0 49 0;
+#X restore 14 -16 pd fundamentalFeedback;
+#X obj 443 -73 loadbang;
+#X obj 443 -44 send lb;
+#N canvas 722 418 601 290 bridgeBodyTransfer 0;
+#X obj 14 40 cnv 15 200 200 empty empty empty 20 12 1 14 -166958 -66577
+0;
+#X obj 24 137 atan~;
+#X obj 26 109 *~;
+#X obj 26 169 *~;
+#X obj 76 134 receive fidelity;
+#X obj 26 49 receive~ filtSig;
+#X obj 26 212 outlet~;
+#X obj 26 190 +~;
+#X text 228 73 Using an Arc-Tan (inverse tangenent) to distort the
+input \, arc tan makes it non-linear. This is to synthesise the sound
+of the string being transfered through the floating foot \, not the
+tapping!;
+#X obj 67 164 *~ 0.5;
+#X obj 48 87 >~ 0.01;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 3 0 7 0;
+#X connect 4 0 3 1;
+#X connect 5 0 2 0;
+#X connect 5 0 9 0;
+#X connect 5 0 10 0;
+#X connect 7 0 6 0;
+#X connect 9 0 7 1;
+#X connect 10 0 2 1;
+#X restore 155 -18 pd bridgeBodyTransfer;
+#N canvas 1038 104 1038 717 tappingBridge 1;
+#X obj 252 135 cnv 15 450 400 empty empty empty 20 12 0 14 -149405
+-66577 0;
+#X obj 303 -14 cnv 15 200 140 empty empty empty 20 12 0 14 -149405
+-66577 0;
+#X obj 39 488 cnv 15 200 160 empty empty empty 20 12 0 14 -149405 -66577
+0;
+#X obj 13 -14 cnv 15 220 220 empty empty empty 20 12 1 14 -166958 -66577
+0;
+#X obj 25 763 outlet~;
+#X obj 111 545 lop~ 1;
+#X obj 111 499 noise~;
+#X obj 111 521 lop~ 1;
+#X obj 111 602 +~ 0.9;
+#X obj 39 603 clip~ 0.8 1;
+#X obj 111 574 *~ 10;
+#X obj 261 230 impulse~ 30;
+#X obj 263 404 *~;
+#X obj 262 313 +~;
+#X obj 341 229 expr~ $v1 > $f2;
+#X obj 105 28 phasor~;
+#X obj 105 59 expr~ $v1 > $f2;
+#X obj 341 200 phasor~;
+#X obj 23 -5 receive freq;
+#X obj 23 30 impulse~ 64;
+#X obj 262 177 / 2;
+#X obj 23 121 +~;
+#X obj 25 423 +~;
+#X obj 38 93 *~ 0.3;
+#X obj 278 333 receive fidelity;
+#X obj 278 370 / 3;
+#X obj 318 -2 receive fidelity;
+#X msg 363 38 load 0 1;
+#X obj 318 69 autoscale 0.1 0.3;
+#X obj 490 235 impulse~ 30;
+#X obj 492 386 *~;
+#X obj 491 303 +~;
+#X obj 571 234 expr~ $v1 > $f2;
+#X obj 571 203 phasor~;
+#X obj 507 326 receive fidelity;
+#X obj 25 463 +~;
+#X obj 277 277 *~ 0.4;
+#X obj 25 728 lop~ 2000;
+#X obj 506 272 *~ 0.2;
+#X obj 490 178 * 2;
+#X obj 507 355 / 2;
+#X obj 24 656 *~;
+#X obj 25 689 *~;
+#X obj 58 662 receive fidelity;
+#X obj 318 102 s PWM;
+#X obj 658 197 r PWM;
+#X obj 428 195 r PWM;
+#X obj 192 18 r PWM;
+#X obj 436 -10 r lb;
+#X obj 436 15 t b b;
+#X msg 463 45 0;
+#X obj 262 148 receive freq;
+#X obj 490 145 receive freq;
+#X text 113 -3 Fundamental OSC;
+#X connect 5 0 10 0;
+#X connect 6 0 7 0;
+#X connect 7 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 41 1;
+#X connect 10 0 8 0;
+#X connect 11 0 13 0;
+#X connect 12 0 22 1;
+#X connect 13 0 12 0;
+#X connect 14 0 36 0;
+#X connect 15 0 16 0;
+#X connect 16 0 23 0;
+#X connect 17 0 14 0;
+#X connect 18 0 15 0;
+#X connect 18 0 19 0;
+#X connect 19 0 21 0;
+#X connect 20 0 11 0;
+#X connect 20 0 17 0;
+#X connect 21 0 22 0;
+#X connect 22 0 35 0;
+#X connect 23 0 21 1;
+#X connect 24 0 25 0;
+#X connect 25 0 12 1;
+#X connect 26 0 28 0;
+#X connect 27 0 28 0;
+#X connect 28 0 44 0;
+#X connect 29 0 31 0;
+#X connect 30 0 35 1;
+#X connect 31 0 30 0;
+#X connect 32 0 38 0;
+#X connect 33 0 32 0;
+#X connect 34 0 40 0;
+#X connect 35 0 41 0;
+#X connect 36 0 13 1;
+#X connect 37 0 4 0;
+#X connect 38 0 31 1;
+#X connect 39 0 29 0;
+#X connect 39 0 33 0;
+#X connect 40 0 30 1;
+#X connect 41 0 42 0;
+#X connect 42 0 37 0;
+#X connect 43 0 42 1;
+#X connect 45 0 32 1;
+#X connect 46 0 14 1;
+#X connect 47 0 16 1;
+#X connect 48 0 49 0;
+#X connect 49 0 27 0;
+#X connect 49 1 50 0;
+#X connect 50 0 28 3;
+#X connect 51 0 20 0;
+#X connect 52 0 39 0;
+#X restore 293 -18 pd tappingBridge;
+#X obj 155 61 +~;
+#X msg 174 229 roomsize 0.08;
+#X obj 263 193 receive lb;
+#X obj 154 352 *~;
+#X text 540 -74 If you are testing with soundfiles through speakers
+be careful the mic isnt picking up the output! (feedback + it messes
+up some parameters);
+#X text 285 58 Sum the bridge body transfer and tapping \; models.
+Put them both though a bandpass \; filter and add to their original
+signal \; creates a peak around the fundamental \; add some reverb
+and then modulate the \; amplitude with this function --->;
+#X obj 172 314 receive bridgeRamp;
+#X obj 699 90 env~;
+#X obj 697 121 / 100;
+#X obj 684 145 +;
+#X obj 699 59 receive~ filtSig;
+#X obj 593 92 receive fidelity;
+#X obj 682 253 float;
+#X obj 682 226 route 1 0;
+#X obj 684 170 speedlim 150;
+#X obj 682 280 - 2;
+#X obj 682 305 abs;
+#X obj 682 329 * 100;
+#X obj 727 430 line 0 1;
+#X obj 727 474 send bridgeRamp;
+#X obj 680 357 float;
+#X obj 566 334 t f b;
+#X obj 634 385 pack 0 0;
+#X floatatom 764 170 5 0 0 0 - - -;
+#X msg 728 329 0 150;
+#X msg 852 132 load 20 500;
+#X obj 814 95 receive rampFreq;
+#X obj 157 274 freeverb~;
+#X obj 683 200 > 1.5;
+#X msg 566 271 load 1.3 1.9;
+#X obj 566 303 autoscale 0.1 1;
+#X msg 340 229 width 1;
+#X msg 261 252 wet 0.15;
+#X msg 340 251 dry 0.3;
+#X obj 814 169 autoscale 1.55 1.4;
+#X obj 156 18 *~ 3;
+#X msg 263 229 damping 0.9;
+#X obj 18 448 *~ 0.2;
+#X text 65 444 String feedback \; to external \; speaker. Bridge \;
+models to \; internal;
+#X obj 566 188 receive lb;
+#X msg 653 256 0;
+#X obj 919 64 receive lb;
+#X msg 928 132 0;
+#X obj 920 93 t b b;
+#X obj 566 220 t b b;
+#X obj 18 492 dac~;
+#X obj 14 -68 adc~;
+#X connect 4 0 46 0;
+#X connect 5 0 6 0;
+#X connect 7 0 44 0;
+#X connect 8 0 9 1;
+#X connect 9 0 36 0;
+#X connect 10 0 36 0;
+#X connect 11 0 10 0;
+#X connect 11 0 45 0;
+#X connect 11 0 40 0;
+#X connect 11 0 41 0;
+#X connect 11 0 42 0;
+#X connect 12 0 54 1;
+#X connect 15 0 12 1;
+#X connect 16 0 17 0;
+#X connect 17 0 18 1;
+#X connect 18 0 23 0;
+#X connect 18 0 32 0;
+#X connect 19 0 16 0;
+#X connect 20 0 18 0;
+#X connect 21 0 24 0;
+#X connect 21 0 39 0;
+#X connect 22 0 21 0;
+#X connect 22 1 33 0;
+#X connect 23 0 21 1;
+#X connect 23 0 37 0;
+#X connect 24 0 25 0;
+#X connect 25 0 26 0;
+#X connect 26 0 29 1;
+#X connect 27 0 28 0;
+#X connect 29 0 31 1;
+#X connect 30 0 31 0;
+#X connect 30 1 29 0;
+#X connect 31 0 27 0;
+#X connect 33 0 27 0;
+#X connect 34 0 43 0;
+#X connect 35 0 43 0;
+#X connect 36 0 12 0;
+#X connect 37 0 22 0;
+#X connect 38 0 39 0;
+#X connect 39 0 30 0;
+#X connect 40 0 36 0;
+#X connect 41 0 36 0;
+#X connect 42 0 36 0;
+#X connect 43 0 37 1;
+#X connect 44 0 9 0;
+#X connect 45 0 36 0;
+#X connect 46 0 54 0;
+#X connect 48 0 53 0;
+#X connect 49 0 39 3;
+#X connect 50 0 52 0;
+#X connect 51 0 43 3;
+#X connect 52 0 34 0;
+#X connect 52 1 51 0;
+#X connect 53 0 38 0;
+#X connect 53 1 49 0;
+#X connect 55 0 4 0;
